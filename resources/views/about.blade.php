@@ -84,7 +84,7 @@
         <div class="md:w-1/3 flex-shrink-0 w-full">
           <div class="about-figure mx-auto max-w-xs">
             <div class="about-frame">
-              <img src="{{ asset('storage/assets/cjsheesh.png') }}" alt="Christ Joy Macuto" />
+              <img src="{{ asset('assets/cjsheesh.png') }}" alt="Christ Joy Macuto" />
             </div>
           </div>
         </div>

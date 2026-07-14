@@ -243,7 +243,7 @@
       <!-- Header (fixed within sidebar) -->
       <div class="p-6 flex-shrink-0 flex flex-col items-center text-center bg-gray-800">
         <div class="relative">
-          <img src="{{ asset('storage/assets/cjsheesh.png') }}" alt="Profile" class="w-24 h-24 rounded-full object-contain border-4 border-gray-900" />
+          <img src="{{ asset('assets/cjsheesh.png') }}" alt="Profile" class="w-24 h-24 rounded-full object-contain border-4 border-gray-900" />
           <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-green-400 ring-2 ring-gray-900"></span>
         </div>
         <div class="mt-3">
@@ -368,7 +368,7 @@
           </div>
         </div>
         <div class="absolute right-0 pointer-events-none z-0" style="width:420px; bottom:-14%;">
-          <img id="heroImg" src="{{ asset('storage/assets/3.png') }}" alt="Profile" class="w-full h-auto block" />
+          <img id="heroImg" src="{{ asset('assets/3.png') }}" alt="Profile" class="w-full h-auto block" />
         </div>
       </div>
 
@@ -456,7 +456,7 @@
         <div class="md:w-1/3 flex-shrink-0 reveal-left w-full">
           <div class="about-figure mx-auto max-w-xs md:max-w-none">
             <div class="about-frame">
-              <img src="{{ asset('storage/assets/cjsheesh.png') }}" alt="Christ Joy Macuto" />
+              <img src="{{ asset('assets/cjsheesh.png') }}" alt="Christ Joy Macuto" />
             </div>
             <span class="about-badge"><i class="fa-solid fa-location-dot"></i>Based in the Philippines</span>
           </div>
@@ -808,7 +808,7 @@
           const light = theme === 'light';
           document.body.classList.toggle('light', light);
           themeIcon.innerHTML = light ? sunSVG : moonSVG;
-          if (heroImg) heroImg.src = light ? '{{ asset("storage/assets/1.png") }}' : '{{ asset("storage/assets/3.png") }}';
+          if (heroImg) heroImg.src = light ? '{{ asset("assets/1.png") }}' : '{{ asset("assets/3.png") }}';
         };
         applyTheme(localStorage.getItem('theme') || 'dark');
         themeToggle.addEventListener('click', () => {

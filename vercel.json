@@ -9,14 +9,7 @@
     }
   },
   "routes": [
-    {
-      "src": "/build/(.*)",
-      "dest": "/build/$1"
-    },
-    {
-      "src": "/storage/(.*)",
-      "dest": "/storage/$1"
-    },
+    { "handle": "filesystem" },
     {
       "src": "/(.*)",
       "dest": "/api/index.php"
@@ -26,8 +19,8 @@
     "APP_ENV": "production",
     "APP_DEBUG": "false",
     "LOG_CHANNEL": "stderr",
-    "DB_CONNECTION": "sqlite",
-    "DB_DATABASE": "/tmp/database.sqlite",
+    "DB_CONNECTION": "pgsql",
+    "DB_SSLMODE": "require",
     "CACHE_DRIVER": "file",
     "SESSION_DRIVER": "cookie"
   }
