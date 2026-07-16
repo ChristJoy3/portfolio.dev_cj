@@ -25,8 +25,6 @@
       .border-accent { border: 3px solid var(--accent) !important }
       .progress-badge{width:44px;height:44px;border-radius:9999px;display:flex;align-items:center;justify-content:center;position:relative;background:transparent}
       .progress-badge .inner{width:36px;height:36px;border-radius:9999px;background:#0f0f10;display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;font-size:0.78rem;line-height:1}
-      /* Floating animation for skill icons */
-      @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
       /* Scroll reveal */
       .reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
       .reveal.visible{opacity:1;transform:translateY(0)}
@@ -37,18 +35,32 @@
       /* Timeline line grow */
       .timeline-line{height:0;transition:height 1.2s ease}
       .timeline-line.grow{height:100%}
-      /* ── Enhanced Skill cards ── */
-      .skill-card{position:relative;background:rgba(31,41,55,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.06);overflow:hidden;text-decoration:none;transition:transform .3s cubic-bezier(.2,.6,.2,1),box-shadow .3s ease,border-color .3s ease}
-      .skill-card:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--accent) 55%,transparent);box-shadow:0 16px 32px -14px rgba(0,0,0,.65),0 0 26px -6px color-mix(in srgb,var(--accent) 60%,transparent)}
-      .skill-card::after{content:'';position:absolute;inset:0;background:radial-gradient(130px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--accent) 26%,transparent),transparent 70%);opacity:0;transition:opacity .3s ease;pointer-events:none}
-      .skill-card:hover::after{opacity:1}
-      .skill-icon-wrap{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;height:3rem;animation:float 3s ease-in-out infinite;animation-delay:calc(var(--i,0)*.25s)}
-      .skill-icon{width:3rem;height:3rem;object-fit:contain;transition:transform .3s cubic-bezier(.2,.6,.2,1),filter .3s ease}
-      .skill-icon-fa{font-size:3rem;line-height:1;transition:transform .3s cubic-bezier(.2,.6,.2,1),filter .3s ease}
-      .skill-card:hover .skill-icon,.skill-card:hover .skill-icon-fa{transform:scale(1.18) translateY(-2px);filter:drop-shadow(0 0 14px var(--accent))}
-      .skill-name{position:relative;z-index:1;color:#9ca3af;transition:color .3s ease,transform .3s ease}
-      .skill-card:hover .skill-name{color:var(--accent);transform:translateY(-1px)}
-      .skill-reveal{transition-delay:calc(var(--i,0)*60ms)}
+      /* ── My Journey tabs ── */
+      .journey-tabs{display:inline-flex;gap:.35rem;padding:.35rem;border-radius:9999px;background:rgba(17,24,39,.6);border:1px solid rgba(0,176,255,.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+      .journey-tab{display:inline-flex;align-items:center;gap:.55rem;padding:.6rem 1.5rem;border:none;border-radius:9999px;background:none;color:#9ca3af;font-size:.9rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:color .25s ease,background-color .25s ease,box-shadow .25s ease}
+      .journey-tab:hover{color:#fff}
+      .journey-tab.is-active{background:linear-gradient(135deg,#00b0ff,#0090d0);color:#fff;box-shadow:0 8px 20px -8px rgba(0,176,255,.7)}
+      .journey-tab:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+      .journey-panel[hidden]{display:none}
+      body.light .journey-tabs{background:rgba(255,255,255,.75);border-color:rgba(0,0,0,.08)}
+      body.light .journey-tab{color:#6b7280}
+      body.light .journey-tab:hover{color:#111827}
+      body.light .journey-tab.is-active{color:#fff}
+      /* ── 3D Icon Cloud (Skills & Tools) ── */
+      .cloud-frame{position:relative;border-radius:1.5rem;border:1px solid rgba(0,176,255,.28);background:rgba(17,24,39,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 25px 50px -22px rgba(0,0,0,.7),inset 0 0 60px rgba(0,176,255,.05);padding:clamp(.75rem,3vw,1.5rem)}
+      body.light .cloud-frame{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.07);box-shadow:0 25px 50px -25px rgba(0,0,0,.22)}
+      .icon-cloud{position:relative;container-type:inline-size;width:100%;max-width:var(--cloud-size,460px);aspect-ratio:1;margin:0 auto;touch-action:pan-y}
+      /* Icons size off the cloud's own width (cqw), not the viewport, so they fit whatever column they land in */
+      .icon-cloud__stage{position:absolute;top:50%;left:50%;--item-size:clamp(2.75rem,17cqw,4.5rem)}
+      .icon-cloud__item{position:absolute;top:0;left:0;display:flex;align-items:center;justify-content:center;width:var(--item-size);height:var(--item-size);margin:calc(var(--item-size)*-.5) 0 0 calc(var(--item-size)*-.5);text-decoration:none;will-change:transform,opacity;transition:filter .25s ease}
+      /* Hovered icon jumps to full strength and above the rest (JS writes opacity/z-index inline) */
+      .icon-cloud__item:hover,.icon-cloud__item:focus-visible{filter:drop-shadow(0 0 16px var(--accent));opacity:1!important;z-index:999!important}
+      .icon-cloud__item:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:.75rem}
+      .skill-icon{width:calc(var(--item-size)*.84);height:calc(var(--item-size)*.84);object-fit:contain;pointer-events:none;-webkit-user-drag:none}
+      .skill-icon-fa{font-size:calc(var(--item-size)*.84);line-height:1;pointer-events:none}
+      /* Counter-scaled by 1/--s so the label reads the same size on near and far icons */
+      .icon-cloud__label{position:absolute;top:100%;left:50%;margin-top:.4rem;padding:.25rem .625rem;border-radius:9999px;background:rgba(11,18,32,.96);border:1px solid color-mix(in srgb,var(--accent) 50%,transparent);color:#fff;font-size:.75rem;font-weight:600;line-height:1.3;white-space:nowrap;pointer-events:none;opacity:0;transform-origin:top center;transform:translateX(-50%) scale(calc(1/var(--s,1)));transition:opacity .15s ease}
+      .icon-cloud__item:hover .icon-cloud__label,.icon-cloud__item:focus-visible .icon-cloud__label{opacity:1}
       /* ── Enhanced Contact form ── */
       .contact-card{position:relative;background:rgba(17,24,39,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.07);border-radius:1.25rem;box-shadow:0 20px 50px -20px rgba(0,0,0,.6)}
       .contact-card::before{content:'';position:absolute;inset:0;border-radius:1.25rem;padding:1px;background:linear-gradient(135deg,rgba(0,176,255,.5),transparent 40%,transparent 60%,rgba(0,176,255,.3));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
@@ -218,8 +230,6 @@
       body.light .border-gray-700{border-color:#d1d5db!important}
       body.light hr.border-gray-700{border-color:#d1d5db!important}
       body.light .progress-badge .inner{background:#ffffff;color:#111827}
-      body.light .skill-card{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.06)}
-      body.light .skill-name{color:#6b7280}
     </style>
   </head>
   <body class="bg-gray-900 text-gray-200 min-h-screen">
@@ -323,16 +333,17 @@
 
         <!-- Extended skills list (scrollable) -->
         <div class="space-y-3">
-          <!-- first column of skills with percentages as requested -->
+          {{-- $skillBars, not $skills: $skills is the icon-cloud collection from HomeController
+               and reusing the name here would shadow it for the rest of the page. --}}
           @php
-            $skills = [
+            $skillBars = [
               ['GitHub',84],['ReactJS',80],['Bootstrap',80],['Git',78],['WordPress Development',75],
               ['MYSQL',72],['JavaScript',70],['ExpressJS',70],['Communication Skills',70],['Project Management',68],
               ['Jira',67],['Laravel',65],['PHP',60],['NodeJS',50],['SEO',50],['Deployment',50]
             ];
           @endphp
 
-          @foreach($skills as $s)
+          @foreach($skillBars as $s)
             <div>
               <div class="flex justify-between mb-1 text-xs text-gray-300">
                 <span>{{ $s[0] }}</span>
@@ -453,34 +464,41 @@
 
       <!-- About Section -->
       <section id="about" class="px-6 md:px-12 py-20 flex flex-col md:flex-row gap-14 items-center">
-        <div class="md:w-1/3 flex-shrink-0 reveal-left w-full">
-          <div class="about-figure mx-auto max-w-xs md:max-w-none">
-            <div class="about-frame">
-              <img src="{{ asset('assets/cjsheesh.png') }}" alt="Christ Joy Macuto" />
+        @if($about->imageSrc())
+          <div class="md:w-1/3 flex-shrink-0 reveal-left w-full">
+            <div class="about-figure mx-auto max-w-xs md:max-w-none">
+              <div class="about-frame">
+                <img src="{{ $about->imageSrc() }}" alt="{{ $about->heading }}" />
+              </div>
+              @if($about->badge_text)
+                <span class="about-badge"><i class="fa-solid fa-location-dot"></i>{{ $about->badge_text }}</span>
+              @endif
             </div>
-            <span class="about-badge"><i class="fa-solid fa-location-dot"></i>Based in the Philippines</span>
           </div>
-        </div>
-        <div class="md:w-2/3 flex flex-col justify-center reveal-right">
-          <span class="about-eyebrow">About Me</span>
-          <h2 class="text-4xl font-bold text-lime-400 mb-5">Hi! I'm CJ</h2>
-          <p class="text-white text-lg font-semibold leading-relaxed mb-4">
-            A passionate Full-Stack Web Developer dedicated to building creative and innovative digital solutions.
-          </p>
-          <p class="text-gray-300 text-base leading-relaxed mb-4">
-            I enjoy working with PHP, JavaScript, and MySQL to build responsive, user-friendly, and scalable web applications — from designing clean database schemas to crafting polished, interactive front-ends. I care about writing maintainable code and turning ideas into products people genuinely enjoy using.
-          </p>
-          <p class="text-gray-300 text-base leading-relaxed mb-6">
-            Based in the Philippines, I've built projects from scratch across a range of domains — personal projects, government-related systems, and school management systems — which taught me how to take a product from concept to deployment.
-          </p>
-          <div class="flex flex-wrap gap-2.5 mb-8">
-            <span class="tech-chip"><i class="fa-brands fa-php"></i>PHP</span>
-            <span class="tech-chip"><i class="fa-brands fa-js"></i>JavaScript</span>
-            <span class="tech-chip"><i class="fa-solid fa-database"></i>MySQL</span>
-            <span class="tech-chip"><i class="fa-brands fa-laravel"></i>Laravel</span>
-            <span class="tech-chip"><i class="fa-brands fa-react"></i>React</span>
-          </div>
-          <a href="{{ route('about') }}" class="hero-btn hero-btn--primary w-fit"><span>More About Me</span><i class="fa-solid fa-arrow-right"></i></a>
+        @endif
+        <div class="{{ $about->imageSrc() ? 'md:w-2/3' : 'w-full' }} flex flex-col justify-center reveal-right">
+          <span class="about-eyebrow">{{ $about->eyebrow }}</span>
+          <h2 class="text-4xl font-bold text-lime-400 mb-5">{{ $about->heading }}</h2>
+          @if($about->lead)
+            <p class="text-white text-lg font-semibold leading-relaxed mb-4">{{ $about->lead }}</p>
+          @endif
+          {{-- One <p> per blank-line-separated block in the admin's body textarea --}}
+          @foreach($about->paragraphs() as $paragraph)
+            <p class="text-gray-300 text-base leading-relaxed {{ $loop->last ? 'mb-6' : 'mb-4' }}">{{ $paragraph }}</p>
+          @endforeach
+          @if($about->chips)
+            <div class="flex flex-wrap gap-2.5 mb-8">
+              @foreach($about->chips as $chip)
+                <span class="tech-chip">
+                  @if(!empty($chip['icon']))<i class="{{ $chip['icon'] }}"></i>@endif
+                  {{ $chip['label'] ?? '' }}
+                </span>
+              @endforeach
+            </div>
+          @endif
+          @if($about->cta_label && $about->cta_url)
+            <a href="{{ $about->cta_url }}" class="hero-btn hero-btn--primary w-fit"><span>{{ $about->cta_label }}</span><i class="fa-solid fa-arrow-right"></i></a>
+          @endif
         </div>
       </section>
 
@@ -488,35 +506,56 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- Skills & Tools Section                         -->
       <!-- ═══════════════════════════════════════════════ -->
-      <section class="bg-gray-900 px-6 md:px-12 py-16 ">
-        <h2 class="text-4xl font-bold text-lime-400 mb-12 text-center reveal">Skills & Tools</h2>
-        <div class="skills-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
-          @php
-            $skills = [
-              ['name' => 'HTML',       'href' => 'https://developer.mozilla.org/docs/Web/HTML',       'accent' => '#e34f26', 'icon' => '<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML" class="skill-icon" />'],
-              ['name' => 'CSS',        'href' => 'https://developer.mozilla.org/docs/Web/CSS',        'accent' => '#1572b6', 'icon' => '<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS" class="skill-icon" />'],
-              ['name' => 'JavaScript', 'href' => 'https://developer.mozilla.org/docs/Web/JavaScript', 'accent' => '#f7df1e', 'icon' => '<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" class="skill-icon" />'],
-              ['name' => 'VS Code',    'href' => 'https://code.visualstudio.com',                     'accent' => '#007acc', 'icon' => '<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" alt="VS Code" class="skill-icon" />'],
-              ['name' => 'Laravel',    'href' => 'https://laravel.com',                               'accent' => '#ff2d20', 'icon' => '<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg" alt="Laravel" class="skill-icon" />'],
-              ['name' => 'Filament',   'href' => 'https://filamentphp.com',                           'accent' => '#fbbf24', 'icon' => '<svg class="skill-icon" style="color:#fbbf24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5v-5H7.5L13 5.5v5h3.5L11 17.5z"/></svg>'],
-              ['name' => 'Git',        'href' => 'https://git-scm.com',                               'accent' => '#f05032', 'icon' => '<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git" class="skill-icon" />'],
-              ['name' => 'GitHub',     'href' => 'https://github.com',                                'accent' => '#c9d1d9', 'icon' => '<i class="fa-brands fa-github skill-icon-fa"></i>'],
-              ['name' => 'cPanel',     'href' => 'https://cpanel.net',                                'accent' => '#ff6b35', 'icon' => '<i class="fa-solid fa-server skill-icon-fa" style="color:#ff6b35"></i>'],
-              ['name' => 'MySQL',      'href' => 'https://www.mysql.com',                             'accent' => '#4479a1', 'icon' => '<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL" class="skill-icon" />'],
-              ['name' => 'PHP',        'href' => 'https://www.php.net',                               'accent' => '#777bb4', 'icon' => '<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" class="skill-icon" />'],
-              ['name' => 'WordPress',  'href' => 'https://wordpress.org',                             'accent' => '#21759b', 'icon' => '<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-plain.svg" alt="WordPress" class="skill-icon" />'],
-            ];
-          @endphp
+      {{-- Splits at lg, not md: the fixed 20rem sidebar kicks in at md and would leave the two
+           columns ~148px each. Below lg this stacks, text over cloud. --}}
+      <section class="px-6 md:px-12 py-20 flex flex-col lg:flex-row gap-14 items-center">
+        <div class="lg:w-1/2 flex flex-col justify-center reveal-left">
+          <span class="about-eyebrow">What I Work With</span>
+          <h2 class="text-4xl font-bold text-lime-400 mb-5">Skills &amp; Tools</h2>
+          <p class="text-white text-lg font-semibold leading-relaxed mb-4">
+            The stack I reach for — from the first line of markup to the final deploy.
+          </p>
+          <p class="text-gray-300 text-base leading-relaxed mb-4">
+            On the front end I work in HTML, CSS, and JavaScript to turn mockups into responsive,
+            user-friendly interfaces. On the back end I build with PHP and Laravel — reaching for
+            Filament when a project needs an admin panel — backed by MySQL databases.
+          </p>
+          <p class="text-gray-300 text-base leading-relaxed mb-6">
+            Day to day I live in VS Code, version everything through Git and GitHub, and deploy over
+            cPanel — plus WordPress work when a project calls for it.
+          </p>
+          <div class="flex flex-wrap gap-2.5 mb-6">
+            <span class="tech-chip"><i class="fa-solid fa-code"></i>Front-end</span>
+            <span class="tech-chip"><i class="fa-solid fa-server"></i>Back-end</span>
+            <span class="tech-chip"><i class="fa-solid fa-database"></i>Databases</span>
+            <span class="tech-chip"><i class="fa-solid fa-rocket"></i>Deployment</span>
+          </div>
+          <p class="text-gray-500 text-sm flex items-center gap-2">
+            <i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>
+            Hover a logo to see what it is.
+          </p>
+        </div>
 
-          @foreach($skills as $s)
-            <div class="skill-reveal reveal" style="--i:{{ $loop->index }}">
-              <a href="{{ $s['href'] }}" target="_blank" rel="noreferrer noopener" title="{{ $s['name'] }}"
-                 class="skill-card group flex flex-col items-center justify-center p-6 rounded-2xl" style="--accent:{{ $s['accent'] }}">
-                <span class="skill-icon-wrap">{!! $s['icon'] !!}</span>
-                <span class="skill-name mt-3 text-sm font-semibold">{{ $s['name'] }}</span>
-              </a>
+        <div class="lg:w-1/2 w-full reveal-right">
+          <div class="cloud-frame mx-auto max-w-[460px]">
+            <div id="skillsCloud" class="icon-cloud" role="region" aria-label="Skills and tools">
+              <div class="icon-cloud__stage" data-cloud-stage>
+                @foreach($skills as $s)
+                  {{-- tabindex when there is no link, so the tooltip is still reachable by keyboard --}}
+                  <a class="icon-cloud__item"
+                     @if($s->href) href="{{ $s->href }}" target="_blank" rel="noreferrer noopener" @else tabindex="0" @endif
+                     aria-label="{{ $s->name }}" style="--accent:{{ $s->accent }}">
+                    @if($s->iconSrc())
+                      <img src="{{ $s->iconSrc() }}" alt="{{ $s->name }}" class="skill-icon" />
+                    @elseif($s->icon_class)
+                      <i class="{{ $s->icon_class }} skill-icon-fa" @if($s->icon_color) style="color:{{ $s->icon_color }}" @endif></i>
+                    @endif
+                    <span class="icon-cloud__label">{{ $s->name }}</span>
+                  </a>
+                @endforeach
+              </div>
             </div>
-          @endforeach
+          </div>
         </div>
       </section>
 
@@ -524,54 +563,45 @@
       <!-- Projects Section                               -->
       <!-- ═══════════════════════════════════════════════ -->
       <section class="bg-gray-900 px-6 md:px-12 py-16 ">
-        <h2 class="text-4xl font-bold text-lime-400 mb-14 text-center reveal">My Projects</h2>
+        {{-- Headings sit at the section's padding edge, not inside the centred content container,
+             so every section heading down the page shares one left edge. --}}
+        <div class="mb-12 reveal">
+          <span class="about-eyebrow">Selected Work</span>
+          <h2 class="text-4xl font-bold text-lime-400">My Projects</h2>
+        </div>
         <div class="projects-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          @php
-            $projects = [
-              [
-                'title' => 'Portfolio Website',
-                'img'   => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80',
-                'desc'  => 'A personal portfolio built with modern web technologies showcasing projects and skills.',
-                'tags'  => ['HTML', 'TailwindCSS', 'JS'],
-              ],
-              [
-                'title' => 'Admin Dashboard',
-                'img'   => 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&q=80',
-                'desc'  => 'A full-featured admin panel built with Laravel and Filament for content management.',
-                'tags'  => ['Laravel', 'Filament', 'MySQL'],
-              ],
-              [
-                'title' => 'E-Commerce Platform',
-                'img'   => 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&q=80',
-                'desc'  => 'A responsive online store with cart functionality, payment integration, and order tracking.',
-                'tags'  => ['PHP', 'WordPress', 'MySQL'],
-              ],
-            ];
-          @endphp
-
           @foreach($projects as $p)
             <div class="reveal project-reveal" style="--i:{{ $loop->index }}">
               <div class="project-card rounded-2xl overflow-hidden h-full">
-                <div class="project-media overflow-hidden">
-                  <img src="{{ $p['img'] }}" alt="{{ $p['title'] }}" class="w-full h-48 object-cover" />
-                </div>
+                @if($p->imageSrc())
+                  <div class="project-media overflow-hidden">
+                    <img src="{{ $p->imageSrc() }}" alt="{{ $p->title }}" class="w-full h-48 object-cover" />
+                  </div>
+                @endif
                 <div class="project-body p-6">
-                  <h3 class="text-lg font-bold text-white mb-2">{{ $p['title'] }}</h3>
-                  <p class="text-gray-400 text-sm mb-4">{{ $p['desc'] }}</p>
-                  <div class="flex flex-wrap gap-2 mb-4">
-                    @foreach($p['tags'] as $t)
-                      <span class="project-tag px-2 py-0.5 bg-gray-700 text-lime-400 text-xs font-semibold rounded">{{ $t }}</span>
-                    @endforeach
-                  </div>
-                  <div class="project-buttons flex gap-3">
-                    <a href="#" class="btn-glow px-4 py-2 bg-lime-400 text-black text-sm font-bold rounded hover:bg-lime-500 transition">Live Demo</a>
-                    <a href="#" class="px-4 py-2 border border-lime-400 text-lime-400 text-sm font-bold rounded hover:bg-lime-400 hover:text-black transition">GitHub</a>
-                  </div>
+                  <h3 class="text-lg font-bold text-white mb-2">{{ $p->title }}</h3>
+                  <p class="text-gray-400 text-sm mb-4">{{ $p->description }}</p>
+                  @if($p->tags)
+                    <div class="flex flex-wrap gap-2 mb-4">
+                      @foreach($p->tags as $t)
+                        <span class="project-tag px-2 py-0.5 bg-gray-700 text-lime-400 text-xs font-semibold rounded">{{ $t }}</span>
+                      @endforeach
+                    </div>
+                  @endif
+                  @if($p->demo_url || $p->repo_url)
+                    <div class="project-buttons flex gap-3">
+                      @if($p->demo_url)
+                        <a href="{{ $p->demo_url }}" target="_blank" rel="noreferrer noopener" class="btn-glow px-4 py-2 bg-lime-400 text-black text-sm font-bold rounded hover:bg-lime-500 transition">Live Demo</a>
+                      @endif
+                      @if($p->repo_url)
+                        <a href="{{ $p->repo_url }}" target="_blank" rel="noreferrer noopener" class="px-4 py-2 border border-lime-400 text-lime-400 text-sm font-bold rounded hover:bg-lime-400 hover:text-black transition">GitHub</a>
+                      @endif
+                    </div>
+                  @endif
                 </div>
               </div>
             </div>
           @endforeach
-
         </div>
       </section>
 
@@ -579,74 +609,74 @@
       <!-- Timeline / My Journey Section                  -->
       <!-- ═══════════════════════════════════════════════ -->
       <section class="bg-gray-900 px-6 md:px-12 py-16 ">
-        <h2 class="text-4xl font-bold text-lime-400 mb-16 text-center reveal">My Journey</h2>
-        <div class="relative max-w-4xl mx-auto" id="timeline">
-          <!-- Center line -->
-          <div class="absolute left-4 md:left-1/2 md:-translate-x-px top-0 w-0.5 bg-gray-700 h-full">
-            <div class="timeline-line w-full bg-lime-400"></div>
-          </div>
+        @php
+          // Tab chrome only — the milestones themselves come from the JourneyMilestone model,
+          // grouped by type in HomeController. A tab with no rows is skipped entirely.
+          $journeyTabs = collect([
+            'experience' => ['label' => 'Experience', 'icon' => 'fa-briefcase'],
+            'education'  => ['label' => 'Education',  'icon' => 'fa-graduation-cap'],
+          ])->filter(fn ($tab, $key) => ($journey[$key] ?? collect())->isNotEmpty());
+        @endphp
 
-          <!-- Item 1 — left -->
-          <div class="relative flex flex-col md:flex-row items-start mb-12">
-            <div class="reveal-left md:w-[45%] md:text-right ml-12 md:ml-0 md:pr-10">
-              <span class="inline-block px-3 py-1 bg-lime-400 text-black text-xs font-bold rounded mb-2">2021</span>
-              <h3 class="text-lg font-bold text-white">Started Learning Web Development</h3>
-              <p class="text-gray-400 text-sm mt-1">Began self-learning HTML, CSS, and JavaScript through online resources and tutorials.</p>
-            </div>
-            <div class="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 bg-lime-400 rounded-full ring-4 ring-gray-900 top-2"></div>
+        {{-- Heading and tabs sit at the section's padding edge; the timeline below stays centred --}}
+        <div class="mb-14">
+          <div class="reveal mb-6">
+            <span class="about-eyebrow">How I Got Here</span>
+            <h2 class="text-4xl font-bold text-lime-400">My Journey</h2>
           </div>
-
-          <!-- Item 2 — right -->
-          <div class="relative flex flex-col md:flex-row items-start mb-12">
-            <div class="hidden md:block md:w-[45%]"></div>
-            <div class="reveal-right md:w-[45%] md:ml-auto ml-12 md:ml-auto md:pl-10">
-              <span class="inline-block px-3 py-1 bg-lime-400 text-black text-xs font-bold rounded mb-2">2022</span>
-              <h3 class="text-lg font-bold text-white">First Freelance Project</h3>
-              <p class="text-gray-400 text-sm mt-1">Completed my first client project — a WordPress website for a local business.</p>
-            </div>
-            <div class="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 bg-lime-400 rounded-full ring-4 ring-gray-900 top-2"></div>
+          <div id="journeyTabs" class="journey-tabs reveal" role="tablist" aria-label="My journey">
+            @foreach($journeyTabs as $key => $tab)
+              <button type="button" class="journey-tab {{ $loop->first ? 'is-active' : '' }}"
+                      role="tab" id="tab-{{ $key }}" aria-controls="panel-{{ $key }}"
+                      aria-selected="{{ $loop->first ? 'true' : 'false' }}" tabindex="{{ $loop->first ? '0' : '-1' }}">
+                <i class="fa-solid {{ $tab['icon'] }}" aria-hidden="true"></i>{{ $tab['label'] }}
+              </button>
+            @endforeach
           </div>
-
-          <!-- Item 3 — left -->
-          <div class="relative flex flex-col md:flex-row items-start mb-12">
-            <div class="reveal-left md:w-[45%] md:text-right ml-12 md:ml-0 md:pr-10">
-              <span class="inline-block px-3 py-1 bg-lime-400 text-black text-xs font-bold rounded mb-2">2023</span>
-              <h3 class="text-lg font-bold text-white">Learned Laravel & PHP</h3>
-              <p class="text-gray-400 text-sm mt-1">Dove into backend development with PHP and the Laravel framework, building full-stack applications.</p>
-            </div>
-            <div class="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 bg-lime-400 rounded-full ring-4 ring-gray-900 top-2"></div>
-          </div>
-
-          <!-- Item 4 — right -->
-          <div class="relative flex flex-col md:flex-row items-start mb-12">
-            <div class="hidden md:block md:w-[45%]"></div>
-            <div class="reveal-right md:w-[45%] md:ml-auto ml-12 md:ml-auto md:pl-10">
-              <span class="inline-block px-3 py-1 bg-lime-400 text-black text-xs font-bold rounded mb-2">2024</span>
-              <h3 class="text-lg font-bold text-white">Expanded to Full-Stack</h3>
-              <p class="text-gray-400 text-sm mt-1">Started building complete web applications using Laravel, Filament, and modern frontend tools.</p>
-            </div>
-            <div class="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 bg-lime-400 rounded-full ring-4 ring-gray-900 top-2"></div>
-          </div>
-
-          <!-- Item 5 — left -->
-          <div class="relative flex flex-col md:flex-row items-start">
-            <div class="reveal-left md:w-[45%] md:text-right ml-12 md:ml-0 md:pr-10">
-              <span class="inline-block px-3 py-1 bg-lime-400 text-black text-xs font-bold rounded mb-2">2025</span>
-              <h3 class="text-lg font-bold text-white">Building & Growing</h3>
-              <p class="text-gray-400 text-sm mt-1">Continuing to ship projects, contribute to open source, and level up as a developer every day.</p>
-            </div>
-            <div class="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 bg-lime-400 rounded-full ring-4 ring-gray-900 top-2"></div>
-          </div>
-
         </div>
+
+        @foreach($journeyTabs as $key => $tab)
+          <div class="journey-panel" id="panel-{{ $key }}" role="tabpanel" aria-labelledby="tab-{{ $key }}"
+               @unless($loop->first) hidden @endunless>
+            <div class="relative max-w-4xl mx-auto" data-timeline>
+              <!-- Center line -->
+              <div class="absolute left-4 md:left-1/2 md:-translate-x-px top-0 w-0.5 bg-gray-700 h-full">
+                <div class="timeline-line w-full bg-lime-400"></div>
+              </div>
+
+              {{-- $loop->index, not the collection key: groupBy() keeps the original positions, so
+                   Education's keys start at 5 and would flip which side each entry lands on. --}}
+              @foreach($journey[$key] as $item)
+                <div class="relative flex flex-col md:flex-row items-start {{ $loop->last ? '' : 'mb-12' }}">
+                  {{-- Odd items sit on the right, so they need a spacer to push them past the centre line --}}
+                  @if($loop->index % 2)
+                    <div class="hidden md:block md:w-[45%]"></div>
+                  @endif
+                  <div class="{{ $loop->index % 2
+                        ? 'reveal-right md:w-[45%] md:ml-auto ml-12 md:pl-10'
+                        : 'reveal-left md:w-[45%] md:text-right ml-12 md:ml-0 md:pr-10' }}">
+                    <span class="inline-block px-3 py-1 bg-lime-400 text-black text-xs font-bold rounded mb-2">{{ $item->year }}</span>
+                    <h3 class="text-lg font-bold text-white">{{ $item->title }}</h3>
+                    <p class="text-gray-400 text-sm mt-1">{{ $item->description }}</p>
+                  </div>
+                  <div class="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 bg-lime-400 rounded-full ring-4 ring-gray-900 top-2"></div>
+                </div>
+              @endforeach
+            </div>
+          </div>
+        @endforeach
       </section>
 
       <!-- ═══════════════════════════════════════════════ -->
       <!-- Contact Section                                -->
       <!-- ═══════════════════════════════════════════════ -->
       <section class="bg-gray-900 px-6 md:px-12 py-16 ">
-        <h2 class="text-4xl font-bold text-lime-400 mb-4 text-center reveal">Get In Touch</h2>
-        <p class="text-gray-400 text-center mb-12 reveal">Have a project in mind or want to collaborate? Let's talk.</p>
+        {{-- Heading sits at the section's padding edge; the form card below stays centred --}}
+        <div class="mb-10 reveal">
+          <span class="about-eyebrow">Contact</span>
+          <h2 class="text-4xl font-bold text-lime-400 mb-3">Get In Touch</h2>
+          <p class="text-gray-400">Have a project in mind or want to collaborate? Let's talk.</p>
+        </div>
 
         <div class="max-w-2xl mx-auto reveal">
           <div class="contact-card p-8 md:p-10">
@@ -774,8 +804,8 @@
         }, { threshold: 0.15 });
         revealEls.forEach((el) => revealObs.observe(el));
 
-        // Project & skill card cursor spotlight
-        document.querySelectorAll('.project-card, .skill-card').forEach((card) => {
+        // Project card cursor spotlight
+        document.querySelectorAll('.project-card').forEach((card) => {
           card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
             card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
@@ -783,10 +813,11 @@
           });
         });
 
-        // Timeline line grow
-        const timelineEl = document.getElementById('timeline');
-        if (timelineEl) {
-          const line = timelineEl.querySelector('.timeline-line');
+        // Timeline line grow — one per journey panel. A hidden panel never intersects, so its
+        // line simply waits and grows the first time its tab is opened.
+        document.querySelectorAll('[data-timeline]').forEach((tl) => {
+          const line = tl.querySelector('.timeline-line');
+          if (!line) return;
           const timelineObs = new IntersectionObserver((entries) => {
             entries.forEach((e) => {
               if (e.isIntersecting) {
@@ -795,7 +826,34 @@
               }
             });
           }, { threshold: 0.1 });
-          timelineObs.observe(timelineEl);
+          timelineObs.observe(tl);
+        });
+
+        // My Journey tabs (Experience / Education)
+        const journeyTablist = document.getElementById('journeyTabs');
+        if (journeyTablist) {
+          const tabs = Array.from(journeyTablist.querySelectorAll('[role="tab"]'));
+          const select = (tab) => {
+            tabs.forEach((t) => {
+              const on = t === tab;
+              t.classList.toggle('is-active', on);
+              t.setAttribute('aria-selected', String(on));
+              t.tabIndex = on ? 0 : -1; // roving tabindex: only the active tab is in the tab order
+              const panel = document.getElementById(t.getAttribute('aria-controls'));
+              if (panel) panel.hidden = !on;
+            });
+          };
+          tabs.forEach((tab, i) => {
+            tab.addEventListener('click', () => select(tab));
+            tab.addEventListener('keydown', (e) => {
+              const dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+              if (!dir) return;
+              e.preventDefault();
+              const next = tabs[(i + dir + tabs.length) % tabs.length];
+              select(next);
+              next.focus();
+            });
+          });
         }
 
         // Light / Dark theme toggle
@@ -844,6 +902,110 @@
           direction: 'left',  // left, right
           hoverSpeed: 0       // 0 = pause on hover
         });
+
+        // Icon cloud init (same Skills & Tools icons, arranged on a rotating sphere)
+        initIconCloud(document.getElementById('skillsCloud'), {
+          speed: 0.28,        // idle spin, radians per second
+          tilt: -0.08,        // idle vertical drift, radians per second
+          hoverBoost: 0.55    // extra radians per second at the container edge
+        });
+
+        function initIconCloud(root, options) {
+          if (!root) return;
+          const { speed = 0.3, tilt = -0.08, hoverBoost = 0.5 } = options || {};
+          const stage = root.querySelector('[data-cloud-stage]');
+          if (!stage) return;
+          const items = Array.from(stage.children);
+          if (!items.length) return;
+
+          // Parking eases ~4x faster than normal: a far icon is only ~30px across, so a lazy
+          // stop would coast it out from under the cursor and drop the hover.
+          const SMOOTH_TAU = 0.35, PARK_TAU = 0.08, GOLDEN = Math.PI * (3 - Math.sqrt(5));
+          let radius = 140, velX = tilt, velY = speed, targetX = tilt, targetY = speed;
+          let lastTs = null, raf = null, parked = false;
+
+          // Fibonacci sphere: spreads the icons evenly instead of clumping at the poles
+          const points = items.map((el, i) => {
+            const y = 1 - (i / Math.max(1, items.length - 1)) * 2;
+            const ring = Math.sqrt(Math.max(0, 1 - y * y));
+            const theta = GOLDEN * i;
+            return { el, x: Math.cos(theta) * ring, y, z: Math.sin(theta) * ring };
+          });
+
+          const measure = () => {
+            const box = Math.min(root.clientWidth, root.clientHeight);
+            // Half an icon of headroom, so an edge-of-sphere icon at full scale still fits
+            radius = Math.max(60, (box - items[0].offsetWidth) / 2 - 2);
+          };
+
+          const rotate = (dx, dy) => {
+            const cx = Math.cos(dx), sx = Math.sin(dx);
+            const cy = Math.cos(dy), sy = Math.sin(dy);
+            for (const p of points) {
+              const x1 = p.x * cy - p.z * sy;
+              const z1 = p.x * sy + p.z * cy;
+              p.x = x1;
+              p.z = p.y * sx + z1 * cx;
+              p.y = p.y * cx - z1 * sx;
+            }
+          };
+
+          const render = () => {
+            for (const p of points) {
+              const depth = (p.z + 1) / 2; // 0 = back of the sphere, 1 = front
+              const scale = 0.4 + depth * 0.6;
+              p.el.style.transform =
+                `translate3d(${(p.x * radius).toFixed(2)}px, ${(p.y * radius).toFixed(2)}px, 0) scale(${scale.toFixed(3)})`;
+              p.el.style.setProperty('--s', scale.toFixed(3)); // label reads this to cancel the scale
+              p.el.style.opacity = (0.35 + depth * 0.65).toFixed(3);
+              p.el.style.zIndex = String(Math.round(depth * 100));
+            }
+          };
+
+          const animate = (ts) => {
+            if (lastTs === null) lastTs = ts;
+            const dt = Math.min(0.05, Math.max(0, ts - lastTs) / 1000);
+            lastTs = ts;
+            const easing = 1 - Math.exp(-dt / (parked ? PARK_TAU : SMOOTH_TAU));
+            velX += ((parked ? 0 : targetX) - velX) * easing;
+            velY += ((parked ? 0 : targetY) - velY) * easing;
+            rotate(velX * dt, velY * dt);
+            render();
+            raf = requestAnimationFrame(animate);
+          };
+
+          measure();
+          render();
+          window.addEventListener('resize', () => { measure(); render(); });
+
+          // Reduced motion: leave the sphere laid out but never spin it
+          if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+
+          root.addEventListener('pointermove', (e) => {
+            const rect = root.getBoundingClientRect();
+            targetY = speed - ((e.clientX - rect.left) / rect.width - 0.5) * hoverBoost * 2;
+            targetX = tilt - ((e.clientY - rect.top) / rect.height - 0.5) * hoverBoost * 2;
+          });
+          root.addEventListener('pointerleave', () => { targetY = speed; targetX = tilt; });
+
+          // Park the sphere while an icon is hovered, or it rotates out from under the cursor and
+          // the label flickers away. Same idea as the logo carousel's hoverSpeed: 0.
+          items.forEach((el) => {
+            el.addEventListener('pointerenter', () => { parked = true; });
+            el.addEventListener('pointerleave', () => { parked = false; });
+            el.addEventListener('focus', () => { parked = true; });
+            el.addEventListener('blur', () => { parked = false; });
+          });
+
+          new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+              if (raf === null) { lastTs = null; raf = requestAnimationFrame(animate); }
+            } else if (raf !== null) {
+              cancelAnimationFrame(raf);
+              raf = null;
+            }
+          }, { threshold: 0.01 }).observe(root);
+        }
 
         function initLogoLoop(root, options) {
           if (!root) return;
