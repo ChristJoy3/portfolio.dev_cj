@@ -80,23 +80,57 @@ class PortfolioSeeder extends Seeder
     private function seedProjects(): void
     {
         $projects = [
+            // Portfolio Website has its real repo + live site. The rest use the GitHub profile and
+            // live site as placeholders — replace with per-project links in the admin panel.
             [
                 'title' => 'Portfolio Website',
                 'image_url' => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80',
                 'description' => 'A personal portfolio built with modern web technologies showcasing projects and skills.',
                 'tags' => ['HTML', 'TailwindCSS', 'JS'],
+                'demo_url' => 'https://portfolio-dev-cj.vercel.app',
+                'repo_url' => 'https://github.com/ChristJoy3/portfolio.dev_cj',
             ],
             [
                 'title' => 'Admin Dashboard',
                 'image_url' => 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&q=80',
                 'description' => 'A full-featured admin panel built with Laravel and Filament for content management.',
                 'tags' => ['Laravel', 'Filament', 'MySQL'],
+                'demo_url' => 'https://portfolio-dev-cj.vercel.app',
+                'repo_url' => 'https://github.com/ChristJoy3',
             ],
             [
                 'title' => 'E-Commerce Platform',
                 'image_url' => 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&q=80',
                 'description' => 'A responsive online store with cart functionality, payment integration, and order tracking.',
                 'tags' => ['PHP', 'WordPress', 'MySQL'],
+                'demo_url' => 'https://portfolio-dev-cj.vercel.app',
+                'repo_url' => 'https://github.com/ChristJoy3',
+            ],
+            // Sample projects — edit or delete these in the admin panel. Themed to match the
+            // domains named in the About section (school, government, local business systems).
+            [
+                'title' => 'School Management System',
+                'image_url' => 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80',
+                'description' => 'Student records, enrollment workflows, and staff dashboards built for the day-to-day needs of teachers.',
+                'tags' => ['Laravel', 'MySQL', 'Filament'],
+                'demo_url' => 'https://portfolio-dev-cj.vercel.app',
+                'repo_url' => 'https://github.com/ChristJoy3',
+            ],
+            [
+                'title' => 'Government Records System',
+                'image_url' => 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&q=80',
+                'description' => 'A records and reporting system for a local government office, with role-based access and audit trails.',
+                'tags' => ['PHP', 'MySQL', 'Bootstrap'],
+                'demo_url' => 'https://portfolio-dev-cj.vercel.app',
+                'repo_url' => 'https://github.com/ChristJoy3',
+            ],
+            [
+                'title' => 'Restaurant Ordering App',
+                'image_url' => 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80',
+                'description' => 'A table-side ordering and kitchen-queue app for a local restaurant, with a live order board.',
+                'tags' => ['React', 'Node.js', 'Express'],
+                'demo_url' => 'https://portfolio-dev-cj.vercel.app',
+                'repo_url' => 'https://github.com/ChristJoy3',
             ],
         ];
 

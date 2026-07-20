@@ -109,8 +109,71 @@
       .project-tag{transition:transform .25s ease,background-color .25s ease,box-shadow .25s ease}
       .project-card:hover .project-tag{background-color:rgba(0,176,255,.16)}
       .project-tag:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,176,255,.3)}
-      /* staggered entrance */
-      .project-reveal{transition-delay:calc(var(--i,0)*140ms)}
+      /* ── Projects spatial showcase ── */
+      /* One project at a time: a floating rounded shot inside a spatial frame (rotating dashed
+         ring + soft glow), details beside it, the side alternating per project. Prev/next + dots
+         switch. Ambient + entrance animations run only on the active item. */
+      /* No overflow:hidden — it was clipping the rotating ring at the top. The one ambient colour
+         is the circular glow, so nothing rectangular remains to cause a square look. */
+      .spatial{position:relative;max-width:72rem;margin:0 auto;min-height:32rem}
+      .spatial__stage{position:relative;z-index:1}
+      .spatial__item{display:none;flex-direction:column;align-items:center;gap:2.5rem;padding:1rem 0 2.5rem}
+      .spatial__item.is-active{display:flex}
+      @media(min-width:1024px){
+        .spatial__item{flex-direction:row;justify-content:center;gap:4.5rem}
+        .spatial__item.is-reverse{flex-direction:row-reverse}
+      }
+      .spatial__visual{position:relative;flex-shrink:0;width:clamp(15rem,58vw,22rem);aspect-ratio:1;display:flex;align-items:center;justify-content:center}
+      .spatial__ring{position:absolute;inset:-7%;border-radius:9999px;border:1px dashed rgba(255,255,255,.14)}
+      /* Circular ambient halo behind the frame — a touch larger than the ring so the colour reads
+         as a soft circle, never a square */
+      .spatial__glow{position:absolute;inset:-4%;border-radius:9999px;background:var(--pc,#3b82f6);filter:blur(52px);opacity:.45}
+      /* No backdrop-filter here: Chromium renders it on the square border-box (ignoring the
+         border-radius), which showed the green glow behind as a square. The dark disc stays
+         circular via border-radius + overflow:hidden. */
+      .spatial__frame{position:relative;z-index:2;width:100%;height:100%;border-radius:9999px;border:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;overflow:hidden}
+      .spatial__float{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+      .spatial__img{width:82%;aspect-ratio:16/10;object-fit:cover;border-radius:1rem;box-shadow:0 20px 50px rgba(0,0,0,.55)}
+      .spatial__status{position:absolute;bottom:.4rem;left:50%;transform:translateX(-50%);z-index:3;display:inline-flex;align-items:center;gap:.5rem;white-space:nowrap;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#9ca3af;background:rgba(2,6,16,.82);padding:.45rem .9rem;border-radius:9999px;border:1px solid rgba(255,255,255,.06)}
+      .spatial__status .dot{width:.4rem;height:.4rem;border-radius:9999px;background:var(--pc,#3b82f6)}
+      .spatial__details{width:100%;max-width:27rem}
+      .spatial__eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#6b7280;margin-bottom:.6rem}
+      .spatial__title{font-size:clamp(1.9rem,4.5vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.85rem;background:linear-gradient(to bottom,#ffffff,#94a3b8);-webkit-background-clip:text;background-clip:text;color:transparent}
+      body.light .spatial__title{background:linear-gradient(to bottom,#0f172a,#64748b);-webkit-background-clip:text;background-clip:text}
+      .spatial__desc{color:#9ca3af;line-height:1.7;margin-bottom:1.5rem}
+      .spatial__panel{background:rgba(17,24,39,.4);border:1px solid rgba(255,255,255,.06);border-radius:1rem;padding:1.35rem;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+      body.light .spatial__panel{background:rgba(255,255,255,.6);border-color:rgba(0,0,0,.06)}
+      .spatial__controls{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:1.25rem;margin-top:.5rem}
+      .spatial__nav{display:flex;align-items:center;justify-content:center;width:2.75rem;height:2.75rem;border-radius:9999px;background:rgba(11,18,32,.72);border:1px solid rgba(0,176,255,.35);color:#fff;cursor:pointer;transition:background-color .2s ease,transform .2s ease}
+      .spatial__nav:hover{background:rgba(0,176,255,.5)}
+      .spatial__nav:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+      .spatial__dots{display:flex;gap:.5rem}
+      .spatial__dot{width:.55rem;height:.55rem;padding:0;border:none;border-radius:9999px;background:rgba(255,255,255,.25);cursor:pointer;transition:background-color .25s ease,transform .25s ease}
+      .spatial__dot.is-active{background:var(--accent);transform:scale(1.3)}
+      .spatial__dot:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+      body.light .spatial__nav{background:rgba(255,255,255,.82);color:#0b1220;border-color:rgba(0,0,0,.1)}
+      body.light .spatial__dot{background:rgba(0,0,0,.2)}
+      @keyframes spatialSpin{to{transform:rotate(360deg)}}
+      @keyframes spatialPulse{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.06);opacity:.55}}
+      @keyframes spatialFloat{0%,100%{transform:translateY(-10px)}50%{transform:translateY(10px)}}
+      @keyframes spatialImgIn{from{opacity:0;transform:scale(1.35);filter:blur(14px)}to{opacity:1;transform:scale(1);filter:blur(0)}}
+      @keyframes spatialItemIn{from{opacity:0;transform:translateY(18px);filter:blur(8px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+      .spatial__item.is-active .spatial__ring{animation:spatialSpin 22s linear infinite}
+      .spatial__item.is-active .spatial__glow{animation:spatialPulse 4s ease-in-out infinite}
+      .spatial__item.is-active .spatial__float{animation:spatialFloat 6s ease-in-out infinite}
+      .spatial__item.is-active .spatial__img{animation:spatialImgIn .7s cubic-bezier(.16,1,.3,1) both}
+      .spatial__item.is-active .spatial__details>*{animation:spatialItemIn .6s cubic-bezier(.16,1,.3,1) both}
+      .spatial__item.is-active .spatial__details>*:nth-child(1){animation-delay:.05s}
+      .spatial__item.is-active .spatial__details>*:nth-child(2){animation-delay:.13s}
+      .spatial__item.is-active .spatial__details>*:nth-child(3){animation-delay:.21s}
+      .spatial__item.is-active .spatial__details>*:nth-child(4){animation-delay:.29s}
+      @media(prefers-reduced-motion:reduce){
+        .spatial__item.is-active .spatial__ring,
+        .spatial__item.is-active .spatial__glow,
+        .spatial__item.is-active .spatial__float,
+        .spatial__item.is-active .spatial__img,
+        .spatial__item.is-active .spatial__details>*{animation:none}
+      }
       body.light .project-card{background:rgba(255,255,255,.7)}
       body.light .project-media::after{background:linear-gradient(to top,rgba(255,255,255,.55),transparent 60%)}
       /* Particle container */
@@ -569,39 +632,69 @@
           <span class="about-eyebrow">Selected Work</span>
           <h2 class="text-4xl font-bold text-lime-400">My Projects</h2>
         </div>
-        <div class="projects-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          @foreach($projects as $p)
-            <div class="reveal project-reveal" style="--i:{{ $loop->index }}">
-              <div class="project-card rounded-2xl overflow-hidden h-full">
-                @if($p->imageSrc())
-                  <div class="project-media overflow-hidden">
-                    <img src="{{ $p->imageSrc() }}" alt="{{ $p->title }}" class="w-full h-48 object-cover" />
+        {{-- Spatial showcase — one project at a time, side alternates, switched in JS (initSpatial) --}}
+        @php $spatialAccents = ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#f43f5e', '#06b6d4']; @endphp
+        <div id="projectsSpatial" class="spatial" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Projects">
+          <div class="spatial__stage" data-spatial-stage>
+            @foreach($projects as $p)
+              @php $accent = $spatialAccents[$loop->index % count($spatialAccents)]; @endphp
+              <div class="spatial__item {{ $loop->index % 2 ? 'is-reverse' : '' }} {{ $loop->first ? 'is-active' : '' }}"
+                   data-index="{{ $loop->index }}" style="--pc:{{ $accent }}"
+                   role="group" aria-roledescription="slide" aria-label="{{ $p->title }}">
+                <div class="spatial__visual">
+                  <div class="spatial__ring" aria-hidden="true"></div>
+                  <div class="spatial__glow" aria-hidden="true"></div>
+                  <div class="spatial__frame">
+                    <div class="spatial__float">
+                      @if($p->imageSrc())
+                        <img class="spatial__img" src="{{ $p->imageSrc() }}" alt="{{ $p->title }}" draggable="false" />
+                      @endif
+                    </div>
                   </div>
-                @endif
-                <div class="project-body p-6">
-                  <h3 class="text-lg font-bold text-white mb-2">{{ $p->title }}</h3>
-                  <p class="text-gray-400 text-sm mb-4">{{ $p->description }}</p>
-                  @if($p->tags)
-                    <div class="flex flex-wrap gap-2 mb-4">
-                      @foreach($p->tags as $t)
-                        <span class="project-tag px-2 py-0.5 bg-gray-700 text-lime-400 text-xs font-semibold rounded">{{ $t }}</span>
-                      @endforeach
-                    </div>
-                  @endif
-                  @if($p->demo_url || $p->repo_url)
-                    <div class="project-buttons flex gap-3">
-                      @if($p->demo_url)
-                        <a href="{{ $p->demo_url }}" target="_blank" rel="noreferrer noopener" class="btn-glow px-4 py-2 bg-lime-400 text-black text-sm font-bold rounded hover:bg-lime-500 transition">Live Demo</a>
-                      @endif
-                      @if($p->repo_url)
-                        <a href="{{ $p->repo_url }}" target="_blank" rel="noreferrer noopener" class="px-4 py-2 border border-lime-400 text-lime-400 text-sm font-bold rounded hover:bg-lime-400 hover:text-black transition">GitHub</a>
-                      @endif
-                    </div>
-                  @endif
+                  <span class="spatial__status"><span class="dot"></span>Project {{ $loop->iteration }} / {{ count($projects) }}</span>
+                </div>
+
+                <div class="spatial__details">
+                  {{-- Lead tag as the eyebrow — avoids repeating the section's "Selected Work" label --}}
+                  <div class="spatial__eyebrow" style="color:{{ $accent }}">{{ $p->tags[0] ?? 'Project' }}</div>
+                  <h3 class="spatial__title">{{ $p->title }}</h3>
+                  <p class="spatial__desc">{{ $p->description }}</p>
+                  <div class="spatial__panel">
+                    @if($p->tags)
+                      <div class="flex flex-wrap gap-2 {{ ($p->demo_url || $p->repo_url) ? 'mb-4' : '' }}">
+                        @foreach($p->tags as $t)
+                          <span class="project-tag px-2 py-0.5 bg-gray-700 text-lime-400 text-xs font-semibold rounded">{{ $t }}</span>
+                        @endforeach
+                      </div>
+                    @endif
+                    @if($p->demo_url || $p->repo_url)
+                      <div class="flex gap-3">
+                        @if($p->demo_url)
+                          <a href="{{ $p->demo_url }}" target="_blank" rel="noreferrer noopener" class="btn-glow px-4 py-2 bg-lime-400 text-black text-sm font-bold rounded hover:bg-lime-500 transition">Live Demo</a>
+                        @endif
+                        @if($p->repo_url)
+                          <a href="{{ $p->repo_url }}" target="_blank" rel="noreferrer noopener" class="px-4 py-2 border border-lime-400 text-lime-400 text-sm font-bold rounded hover:bg-lime-400 hover:text-black transition">GitHub</a>
+                        @endif
+                      </div>
+                    @endif
+                    @unless($p->tags || $p->demo_url || $p->repo_url)
+                      <p class="text-gray-500 text-sm">More details coming soon.</p>
+                    @endunless
+                  </div>
                 </div>
               </div>
-            </div>
-          @endforeach
+            @endforeach
+          </div>
+
+          <div class="spatial__controls">
+            <button type="button" class="spatial__nav spatial__nav--prev" aria-label="Previous project">
+              <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <div class="spatial__dots" data-spatial-dots aria-hidden="true"></div>
+            <button type="button" class="spatial__nav spatial__nav--next" aria-label="Next project">
+              <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -812,6 +905,70 @@
             card.style.setProperty('--my', `${e.clientY - rect.top}px`);
           });
         });
+
+        // Projects: spatial showcase. One project at a time — a floating shot in a spatial frame
+        // with rotating ring + glow, details beside it, side alternating per project. Prev/next,
+        // dots, keyboard, swipe, and gentle autoplay switch; the background gradient shifts to the
+        // active project's colour. Entrance + ambient animations are pure CSS on .is-active.
+        (function initSpatial() {
+          const root = document.getElementById('projectsSpatial');
+          if (!root) return;
+          const items = Array.from(root.querySelectorAll('.spatial__item'));
+          const dotsWrap = root.querySelector('[data-spatial-dots]');
+          const n = items.length;
+          if (!n) return;
+
+          const reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+          let active = items.findIndex((it) => it.classList.contains('is-active'));
+          if (active < 0) active = 0;
+          let timer = null;
+
+          const dots = items.map((_, i) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'spatial__dot';
+            b.setAttribute('aria-label', 'Go to project ' + (i + 1));
+            b.addEventListener('click', () => go(i));
+            dotsWrap.appendChild(b);
+            return b;
+          });
+
+          // Colour per project comes from each item's --pc (used by the circular glow in CSS),
+          // so switching is just a class toggle — no background painting needed.
+          const paint = () => {
+            items.forEach((it, i) => it.classList.toggle('is-active', i === active));
+            dots.forEach((dt, i) => dt.classList.toggle('is-active', i === active));
+          };
+
+          const stop = () => { clearInterval(timer); timer = null; };
+          const restart = () => { if (reduce) return; stop(); timer = setInterval(() => go(active + 1), 5000); };
+          const go = (i) => { active = ((i % n) + n) % n; paint(); restart(); };
+
+          root.querySelector('.spatial__nav--next').addEventListener('click', () => go(active + 1));
+          root.querySelector('.spatial__nav--prev').addEventListener('click', () => go(active - 1));
+
+          root.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') { e.preventDefault(); go(active + 1); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); go(active - 1); }
+          });
+
+          // Swipe / drag anywhere on the stage (a real click keeps dx ~0, so links still work)
+          let downX = null;
+          root.addEventListener('pointerdown', (e) => { downX = e.clientX; });
+          root.addEventListener('pointerup', (e) => {
+            if (downX === null) return;
+            const dx = e.clientX - downX; downX = null;
+            if (Math.abs(dx) > 45) go(active + (dx < 0 ? 1 : -1));
+          });
+
+          root.addEventListener('mouseenter', stop);
+          root.addEventListener('mouseleave', restart);
+          root.addEventListener('focusin', stop);
+          root.addEventListener('focusout', restart);
+
+          paint();
+          restart();
+        })();
 
         // Timeline line grow — one per journey panel. A hidden panel never intersects, so its
         // line simply waits and grows the first time its tab is opened.
