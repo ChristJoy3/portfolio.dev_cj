@@ -12,13 +12,17 @@ $writablePaths = [
     'VIEW_COMPILED_PATH' => '/tmp/storage/framework/views',
 ];
 
+// Filament/Livewire stage uploaded files under storage/app before we move them into the
+// database, so storage has to be somewhere writable too.
+$writablePaths['LARAVEL_STORAGE_PATH'] = '/tmp/storage';
+
 foreach ($writablePaths as $key => $value) {
     putenv("{$key}={$value}");
     $_ENV[$key] = $value;
     $_SERVER[$key] = $value;
 }
 
-foreach (['/tmp/bootstrap/cache', '/tmp/storage/framework/views'] as $dir) {
+foreach (['/tmp/bootstrap/cache', '/tmp/storage/framework/views', '/tmp/storage/app/private', '/tmp/storage/framework/cache'] as $dir) {
     if (! is_dir($dir)) {
         mkdir($dir, 0755, true);
     }

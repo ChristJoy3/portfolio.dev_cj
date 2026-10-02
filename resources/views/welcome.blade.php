@@ -316,117 +316,90 @@
       <!-- Header (fixed within sidebar) -->
       <div class="p-6 flex-shrink-0 flex flex-col items-center text-center bg-gray-800">
         <div class="relative">
-          <img src="{{ asset('assets/cjsheesh.png') }}" alt="Profile" class="w-24 h-24 rounded-full object-contain border-4 border-gray-900" />
+          @if($sidebar->imageSrc())
+            <img src="{{ $sidebar->imageSrc() }}" alt="Profile" class="w-24 h-24 rounded-full object-contain border-4 border-gray-900" />
+          @endif
           <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-green-400 ring-2 ring-gray-900"></span>
         </div>
         <div class="mt-3">
-          <h3 class="text-white font-semibold">Christ Joy Macuto</h3>
-          <p class="text-sm text-gray-300">React.js | Javascript | RESTful API | PHP | Node/Express</p>
+          <h3 class="text-white font-semibold">{{ $sidebar->name }}</h3>
+          @if($sidebar->tagline)
+            <p class="text-sm text-gray-300">{{ $sidebar->tagline }}</p>
+          @endif
         </div>
       </div>
 
       <!-- Scrollable content area (transparent) -->
       <div class="px-6 pb-6 overflow-auto flex-1 bg-gray-800">
-        <dl class="text-sm text-gray-400 space-y-4">
-          <div class="flex justify-between">
-            <dt class="font-medium">Address:</dt>
-            <dd>Hilongos, Leyte</dd>
-          </div>
-          <div class="flex justify-between">
-            <dt class="font-medium">Email:</dt>
-            <dd>christjoy@gmail.com</dd>
-          </div>
-        </dl>
-
-        <hr class="my-4 border-gray-700" />
-
-        <!-- Circular skill indicators -->
-        <div class="flex justify-between items-center gap-3">
-          <div class="flex-1 text-center">
-            <div class="mx-auto progress-badge" style="background:conic-gradient(from -90deg, var(--accent) 0 342deg, rgba(255,255,255,0.06) 342deg 360deg)">
-              <div class="inner">95%</div>
-            </div>
-            <p class="mt-2 text-xs text-gray-300">Cebuano</p>
-          </div>
-          <div class="flex-1 text-center">
-            <div class="mx-auto progress-badge" style="background:conic-gradient(from -90deg, var(--accent) 0 216deg, rgba(255,255,255,0.06) 216deg 360deg)">
-              <div class="inner">60%</div>
-            </div>
-            <p class="mt-2 text-xs text-gray-300">English</p>
-          </div>
-          <div class="flex-1 text-center">
-            <div class="mx-auto progress-badge" style="background:conic-gradient(from -90deg, var(--accent) 0 306deg, rgba(255,255,255,0.06) 306deg 360deg)">
-              <div class="inner">85%</div>
-            </div>
-            <p class="mt-2 text-xs text-gray-300">Tagalog</p>
-          </div>
-        </div>
-
-        <hr class="my-4 border-gray-700" />
-
-        <!-- Core skill bars -->
-        <div class="space-y-4">
-          <div>
-              <div class="flex justify-between mb-1">
-                <span class="text-xs text-gray-300">HTML</span>
-                <span class="text-xs">93%</span>
+        @if($sidebar->address || $sidebar->email)
+          <dl class="text-sm text-gray-400 space-y-4">
+            @if($sidebar->address)
+              <div class="flex justify-between">
+                <dt class="font-medium">Address:</dt>
+                <dd>{{ $sidebar->address }}</dd>
               </div>
-              <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
-                <div class="h-full bg-accent" style="width:93%"></div>
+            @endif
+            @if($sidebar->email)
+              <div class="flex justify-between">
+                <dt class="font-medium">Email:</dt>
+                <dd>{{ $sidebar->email }}</dd>
               </div>
+            @endif
+          </dl>
+
+          <hr class="my-4 border-gray-700" />
+        @endif
+
+        @if($sidebarSkills->has('language'))
+          <!-- Circular skill indicators -->
+          <div class="flex justify-between items-center gap-3">
+            @foreach($sidebarSkills['language'] as $l)
+              <div class="flex-1 text-center">
+                <div class="mx-auto progress-badge" style="background:conic-gradient(from -90deg, var(--accent) 0 {{ $l->level * 3.6 }}deg, rgba(255,255,255,0.06) {{ $l->level * 3.6 }}deg 360deg)">
+                  <div class="inner">{{ $l->level }}%</div>
+                </div>
+                <p class="mt-2 text-xs text-gray-300">{{ $l->name }}</p>
+              </div>
+            @endforeach
           </div>
 
-          <div>
-            <div class="flex justify-between mb-1">
-              <span class="text-xs text-gray-300">CSS</span>
-              <span class="text-xs">89%</span>
+          <hr class="my-4 border-gray-700" />
+        @endif
+
+        {{-- Not named $skills: that is the icon-cloud collection from HomeController. --}}
+        @foreach(['core', 'extended'] as $group)
+          @if($sidebarSkills->has($group))
+            <div class="space-y-{{ $group === 'core' ? '4' : '3' }}">
+              @foreach($sidebarSkills[$group] as $s)
+                <div>
+                  <div class="flex justify-between mb-1 text-xs text-gray-300">
+                    <span>{{ $s->name }}</span>
+                    <span>{{ $s->level }}%</span>
+                  </div>
+                  <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                    <div class="h-full bg-accent" style="width:{{ $s->level }}%"></div>
+                  </div>
+                </div>
+              @endforeach
             </div>
-            <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
-              <div class="h-full bg-accent" style="width:89%"></div>
-            </div>
 
-            
-          
-          </div>
-        </div>
-
-        
-
-        <hr class="my-4 border-gray-700" />
-
-        <!-- Extended skills list (scrollable) -->
-        <div class="space-y-3">
-          {{-- $skillBars, not $skills: $skills is the icon-cloud collection from HomeController
-               and reusing the name here would shadow it for the rest of the page. --}}
-          @php
-            $skillBars = [
-              ['GitHub',84],['ReactJS',80],['Bootstrap',80],['Git',78],['WordPress Development',75],
-              ['MYSQL',72],['JavaScript',70],['ExpressJS',70],['Communication Skills',70],['Project Management',68],
-              ['Jira',67],['Laravel',65],['PHP',60],['NodeJS',50],['SEO',50],['Deployment',50]
-            ];
-          @endphp
-
-          @foreach($skillBars as $s)
-            <div>
-              <div class="flex justify-between mb-1 text-xs text-gray-300">
-                <span>{{ $s[0] }}</span>
-                <span>{{ $s[1] }}%</span>
-              </div>
-              <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
-                <div class="h-full bg-accent" style="width:{{ $s[1] }}%"></div>
-              </div>
-            </div>
-          @endforeach
-        </div>
+            @if($group === 'core' && $sidebarSkills->has('extended'))
+              <hr class="my-4 border-gray-700" />
+            @endif
+          @endif
+        @endforeach
       </div>
 
       <!-- Footer (fixed bottom within sidebar) -->
-      <div class="p-4 flex-shrink-0 bg-gray-800 border-t border-gray-700">
-        <div class="flex justify-center gap-4 text-gray-400">
-          <a href="https://github.com/" target="_blank" rel="noopener" aria-label="github" class="hover:text-white">GitHub</a>
-          <a href="https://www.linkedin.com/in/christjoy" target="_blank" rel="noopener" aria-label="linkedin" class="hover:text-white">LinkedIn</a>
+      @if(!empty($sidebar->links))
+        <div class="p-4 flex-shrink-0 bg-gray-800 border-t border-gray-700">
+          <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 text-gray-400">
+            @foreach($sidebar->links as $link)
+              <a href="{{ $link['url'] }}" target="_blank" rel="noopener" aria-label="{{ strtolower($link['label']) }}" class="hover:text-white">{{ $link['label'] }}</a>
+            @endforeach
+          </div>
         </div>
-      </div>
+      @endif
     </aside>
 
     <!-- Main content area (pushes right of fixed sidebar) -->
