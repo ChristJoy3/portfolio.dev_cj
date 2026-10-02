@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use App\Models\About;
 use App\Models\JourneyMilestone;
 use App\Models\Project;
+use App\Models\Resume;
+use App\Models\SidebarProfile;
+use App\Models\SidebarSkill;
 use App\Models\Skill;
 use Illuminate\Database\Seeder;
 
@@ -20,6 +23,8 @@ class PortfolioSeeder extends Seeder
         $this->seedSkills();
         $this->seedProjects();
         $this->seedJourney();
+        $this->seedSidebar();
+        $this->seedResume();
     }
 
     private function seedAbout(): void
@@ -140,6 +145,85 @@ class PortfolioSeeder extends Seeder
                 $project + ['sort_order' => $i, 'is_active' => true]
             );
         }
+    }
+
+    private function seedSidebar(): void
+    {
+        SidebarProfile::current()->update([
+            'name' => 'Christ Joy Macuto',
+            'tagline' => 'React.js | Javascript | RESTful API | PHP | Node/Express',
+            'image_url' => 'assets/cjsheesh.png',
+            'address' => 'Hilongos, Leyte',
+            'email' => 'christjoy@gmail.com',
+            'links' => [
+                ['label' => 'GitHub', 'url' => 'https://github.com/'],
+                ['label' => 'LinkedIn', 'url' => 'https://www.linkedin.com/in/christjoy'],
+            ],
+        ]);
+
+        $levels = [
+            'language' => [['Cebuano', 95], ['English', 60], ['Tagalog', 85]],
+            'core' => [['HTML', 93], ['CSS', 89]],
+            'extended' => [
+                ['GitHub', 84], ['ReactJS', 80], ['Bootstrap', 80], ['Git', 78], ['WordPress Development', 75],
+                ['MYSQL', 72], ['JavaScript', 70], ['ExpressJS', 70], ['Communication Skills', 70], ['Project Management', 68],
+                ['Jira', 67], ['Laravel', 65], ['PHP', 60], ['NodeJS', 50], ['SEO', 50], ['Deployment', 50],
+            ],
+        ];
+
+        $order = 0;
+        foreach ($levels as $group => $rows) {
+            foreach ($rows as [$name, $level]) {
+                SidebarSkill::updateOrCreate(
+                    ['group' => $group, 'name' => $name],
+                    ['level' => $level, 'sort_order' => $order++, 'is_active' => true]
+                );
+            }
+        }
+    }
+
+    private function seedResume(): void
+    {
+        Resume::current()->update([
+            'name' => 'Christ Joy R. Macuto',
+            'headline' => 'Web Developer',
+            'location' => 'Hilongos, Leyte, Philippines',
+            'phone' => '0992 521 2492',
+            'email' => 'christjoy2022@gmail.com',
+            'website' => 'portfolio-devcj.vercel.app',
+            'summary' => 'Web Developer with 2+ years of hands-on experience building websites and custom web systems for schools, government offices, and private clients. Skilled in full-stack development using HTML, CSS, JavaScript, PHP, Laravel, Filament, and MySQL, from turning mockups into responsive interfaces to deploying live sites via cPanel. BSIT graduate, Academic Achiever, and Best in Capstone awardee, known for solving problems, meeting deadlines, and delivering client-ready solutions.',
+            'skills' => [
+                ['label' => 'Front-end', 'items' => 'HTML5, CSS3, JavaScript, Responsive Web Design, UI Implementation from Mockups'],
+                ['label' => 'Back-end', 'items' => 'PHP, Laravel, Filament (Admin Panels)'],
+                ['label' => 'Databases', 'items' => 'MySQL'],
+                ['label' => 'CMS', 'items' => 'WordPress'],
+                ['label' => 'Tools & Version Control', 'items' => 'Visual Studio Code, Git, GitHub'],
+                ['label' => 'Deployment & Hosting', 'items' => 'cPanel, Web Hosting, Domain and Server Setup'],
+            ],
+            'experience' => [[
+                'role' => 'Web Developer (Project-Based)',
+                'organization' => 'CreativeDevLabs',
+                'details' => "2F Traveler's Lounge 1, Baywalk, Hilongos, Leyte 6524",
+                'period' => '2024 – Present',
+                'bullets' => implode("\n", [
+                    'Develop and deliver websites for schools, government offices, and private clients from planning to launch.',
+                    'Build custom web-based systems tailored to client requirements using PHP, Laravel, and MySQL.',
+                    'Create admin panels with Filament for easier content and data management by clients.',
+                    'Convert design mockups into responsive, user-friendly interfaces using HTML, CSS, and JavaScript.',
+                    'Develop and customize WordPress websites when projects call for a CMS solution.',
+                    'Deploy and maintain live websites through cPanel, including hosting and database setup.',
+                    'Manage source code and track changes using Git and GitHub.',
+                    'Communicate with clients to gather requirements, present progress, and apply revisions within deadlines.',
+                ]),
+            ]],
+            'education' => [[
+                'degree' => 'Bachelor of Science in Information Technology (BSIT)',
+                'school' => 'MLG College of Learning, Inc.',
+                'period' => 'Graduated 2026',
+                'highlights' => "Academic Achiever\nBest in Capstone Awardee",
+            ]],
+            'soft_skills' => ['Problem-Solving', 'Communication', 'Team Collaboration', 'Time Management', 'Adaptability', 'Critical Thinking', 'Attention to Detail', 'Accountability', 'Continuous Learning'],
+        ]);
     }
 
     private function seedJourney(): void

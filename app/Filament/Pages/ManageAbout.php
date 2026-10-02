@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Forms\ImageUpload;
 use App\Models\About;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -88,12 +89,9 @@ class ManageAbout extends Page
                     ]),
 
                 Section::make('Photo')
-                    ->description("A URL, not an upload — Vercel's filesystem is read-only, so an uploaded file would disappear on the next deploy.")
                     ->schema([
-                        TextInput::make('image_url')
-                            ->label('Photo URL')
-                            ->maxLength(255)
-                            ->helperText('A full URL, or a path to a file committed in public/ — e.g. assets/cjsheesh.png'),
+                        ImageUpload::make('image_url')
+                            ->label('Photo'),
 
                         TextInput::make('badge_text')
                             ->label('Badge')

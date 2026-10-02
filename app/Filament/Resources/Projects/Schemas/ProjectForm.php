@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Projects\Schemas;
 
+use App\Filament\Forms\ImageUpload;
 use App\Models\Project;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
@@ -46,13 +47,9 @@ class ProjectForm
                     ->columns(2),
 
                 Section::make('Image')
-                    ->description("A URL, not an upload — Vercel's filesystem is read-only, so an uploaded file would disappear on the next deploy.")
                     ->schema([
-                        TextInput::make('image_url')
-                            ->label('Image URL')
-                            ->maxLength(255)
-                            ->placeholder('https://images.unsplash.com/photo-...?w=600&q=80')
-                            ->helperText('Any public image URL. To use your own file, commit it to public/assets/ and enter: assets/your-file.jpg')
+                        ImageUpload::make('image_url')
+                            ->label('Image')
                             ->columnSpanFull(),
                     ]),
 
