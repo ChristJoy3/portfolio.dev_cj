@@ -18,7 +18,7 @@ class SkillsTable
     {
         return $table
             ->defaultSort('sort_order')
-            ->reorderable('sort_order') // drag rows to reorder the sphere
+            ->reorderable('sort_order') 
             ->columns([
                 ImageColumn::make('icon_url')
                     ->label('Icon')
